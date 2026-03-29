@@ -71,6 +71,24 @@
     <!-- PROGRAMME -->
     <div class="tab-content active" id="tab-programme">
 
+      <!-- Résumé kilométrique -->
+      <div style="background:#0f3460;border-radius:10px;padding:12px;margin-bottom:12px;border-left:4px solid #e74c3c">
+        <div style="font-size:0.8rem;color:#e74c3c;font-weight:bold;margin-bottom:8px">🚗 Kilométrage total du voyage</div>
+        <table style="width:100%;font-size:0.72rem;border-collapse:collapse;color:#ccc">
+          <tr style="color:#888;font-size:0.68rem"><td>Trajet</td><td style="text-align:right">km</td><td style="text-align:right">durée</td></tr>
+          <tr><td>Morez → Domodossola (Simplon)</td><td style="text-align:right;color:#e74c3c">274 km</td><td style="text-align:right">4h00</td></tr>
+          <tr><td>Domodossola → Lac d'Orta</td><td style="text-align:right;color:#e74c3c">39 km</td><td style="text-align:right">0h35</td></tr>
+          <tr><td>Orta → Arona/Stresa</td><td style="text-align:right;color:#e74c3c">22 km</td><td style="text-align:right">0h25</td></tr>
+          <tr><td>Stresa → (ferry) → Côme</td><td style="text-align:right;color:#e74c3c">90 km</td><td style="text-align:right">1h15</td></tr>
+          <tr><td>Côme → Lecco</td><td style="text-align:right;color:#e74c3c">31 km</td><td style="text-align:right">0h35</td></tr>
+          <tr><td>Lecco → Limone sul Garda</td><td style="text-align:right;color:#e74c3c">153 km</td><td style="text-align:right">2h30</td></tr>
+          <tr><td>Riva del Garda → Lugano</td><td style="text-align:right;color:#e74c3c">240 km</td><td style="text-align:right">3h20</td></tr>
+          <tr><td>Lugano → Morez (retour)</td><td style="text-align:right;color:#e74c3c">402 km</td><td style="text-align:right">5h10</td></tr>
+          <tr style="border-top:1px solid #333;font-weight:bold;color:#fff"><td>TOTAL</td><td style="text-align:right;color:#2ecc71">1 251 km</td><td style="text-align:right;color:#2ecc71">~18h</td></tr>
+        </table>
+        <div style="margin-top:8px;font-size:0.7rem;color:#888">🚴 + ~100 km de vélo sur le séjour</div>
+      </div>
+
       <div class="day-card">
         <div class="day-header" onclick="toggleDay(this)">
           <div class="day-num">V</div>
@@ -78,7 +96,8 @@
           <span>▾</span>
         </div>
         <div class="day-body">
-          🚗 Trajet via le col du Simplon (~3h45)<br><br>
+          🚗 <strong>274 km — ~4h</strong> via col du Simplon<br>
+          💰 Vignette suisse 40 CHF (~42€) — valable tout le séjour<br><br>
           <div><span class="chip blue">⛰️ Col du Simplon</span><span class="chip green">🌙 Arrivée ~22h</span></div>
         </div>
       </div>
@@ -90,10 +109,12 @@
           <span>▾</span>
         </div>
         <div class="day-body">
+          🚗 Domodossola → Omegna : <strong>39 km — 35 min</strong><br>
           🚴 Omegna → Orta San Giulio (~25 km, rive ouest)<br>
           ⛵ Bateau pour l'île San Giulio (~4€/pers)<br>
+          🚗 Orta → Arona/Stresa : <strong>22 km — 25 min</strong><br>
           🛏️ Nuit : Arona ou Stresa<br><br>
-          <div><span class="chip green">🚴 25 km facile</span><span class="chip orange">⛵ Île San Giulio</span></div>
+          <div><span class="chip red">🚗 61 km</span><span class="chip green">🚴 25 km facile</span><span class="chip orange">⛵ Île San Giulio</span></div>
         </div>
       </div>
 
@@ -107,8 +128,9 @@
           🚴 Arona → Stresa (~30 km, bord du lac)<br>
           ⛴️ Ferry Stresa → Laveno (vélos acceptés)<br>
           🏝️ Option : Isola Bella<br>
+          🚗 Laveno → Côme : <strong>90 km — 1h15</strong><br>
           🛏️ Nuit : Côme / Varese<br><br>
-          <div><span class="chip green">🚴 30 km plat</span><span class="chip blue">⛴️ Ferry inclus</span></div>
+          <div><span class="chip red">🚗 90 km</span><span class="chip green">🚴 30 km plat</span><span class="chip blue">⛴️ Ferry inclus</span></div>
         </div>
       </div>
 
@@ -119,10 +141,11 @@
           <span>▾</span>
         </div>
         <div class="day-body">
+          🚗 Côme → Lecco : <strong>31 km — 35 min</strong><br>
           🚴 Piste de l'Adda (Lecco) ~20 km, plat<br>
           🚡 Funiculaire Côme → Brunate (vue panoramique)<br>
           🛏️ Nuit : Côme / Lecco<br><br>
-          <div><span class="chip green">🚴 20 km plat</span><span class="chip orange">🚡 Funiculaire</span></div>
+          <div><span class="chip red">🚗 31 km</span><span class="chip green">🚴 20 km plat</span><span class="chip orange">🚡 Funiculaire</span></div>
         </div>
       </div>
 
@@ -133,10 +156,11 @@
           <span>▾</span>
         </div>
         <div class="day-body">
+          🚗 Lecco → Limone sul Garda : <strong>153 km — 2h30</strong><br>
           🌟 Sentiero del Ponale — piste SUSPENDUE (~5 km A/R)<br>
           🚴 Détente à Riva del Garda<br>
           🛏️ Nuit : Riva / Rovereto<br><br>
-          <div><span class="chip red">🌟 Incontournable</span><span class="chip orange">10 km/h max</span></div>
+          <div><span class="chip red">🚗 153 km</span><span class="chip red">🌟 Incontournable</span><span class="chip orange">10 km/h max</span></div>
         </div>
       </div>
 
@@ -147,9 +171,11 @@
           <span>▾</span>
         </div>
         <div class="day-body">
+          🚗 Riva → Lugano : <strong>240 km — 3h20</strong><br>
           🚴 Quais de Lugano (~10 km, plat)<br>
-          🚗 Retour Morez via Gothard ou Simplon<br><br>
-          <div><span class="chip green">🇨🇭 Suisse</span><span class="chip blue">🏠 Retour ~18h</span></div>
+          🚗 Lugano → Morez : <strong>402 km — 5h10</strong><br>
+          🏠 Arrivée Morez ~19h<br><br>
+          <div><span class="chip red">🚗 642 km ce jour</span><span class="chip green">🇨🇭 Suisse</span></div>
         </div>
       </div>
     </div>
