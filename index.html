@@ -323,34 +323,39 @@
         <div style="font-size:0.82rem;color:#9b59b6;font-weight:bold;margin-bottom:6px">📅 Récapitulatif nuits</div>
         <table style="width:100%;font-size:0.72rem;border-collapse:collapse;color:#ccc">
           <tr style="color:#888;font-size:0.68rem"><td>Nuit</td><td>Lieu</td><td style="text-align:right">Statut</td></tr>
-          <tr><td>Ven 4 → Sam 5</td><td>Domodossola</td><td style="text-align:right;color:#888">À réserver</td></tr>
-          <tr><td>Sam 5 → Dim 6</td><td>Arona / Stresa</td><td style="text-align:right;color:#888">À réserver</td></tr>
-          <tr><td>Dim 6 → Lun 7</td><td>Côme / Varese</td><td style="text-align:right;color:#888">À réserver</td></tr>
-          <tr><td>Lun 7 → Mar 8</td><td>Côme / Lecco</td><td style="text-align:right;color:#888">À réserver</td></tr>
-          <tr style="color:#2ecc71;font-weight:bold"><td>Mar 8 → Mer 9</td><td>Riva del Garda</td><td style="text-align:right">✅ Réservé</td></tr>
+          <tr><td>Ven 4 → Sam 5</td><td>Domodossola / Verbania</td><td style="text-align:right;color:#f39c12">À réserver</td></tr>
+          <tr><td>Sam 5 → Dim 6</td><td>Arona / Stresa</td><td style="text-align:right;color:#f39c12">À réserver</td></tr>
+          <tr><td>Dim 6 → Lun 7</td><td>Côme / Varese</td><td style="text-align:right;color:#f39c12">À réserver</td></tr>
+          <tr><td>Lun 7 → Mar 8</td><td>Côme / Lecco</td><td style="text-align:right;color:#f39c12">À réserver</td></tr>
+          <tr style="color:#2ecc71;font-weight:bold"><td>Mar 8 → Mer 9</td><td>🏠 Riva del Garda</td><td style="text-align:right">✅ Réservé</td></tr>
         </table>
       </div>
 
       <div class="section-title">✅ Réservations confirmées</div>
 
       <div style="background:#1a1a2e;border-radius:8px;padding:12px;margin:6px 0;border-left:4px solid #2ecc71">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-          <span style="font-size:1.4em">🏠</span>
-          <div>
-            <div style="font-size:0.85rem;color:#2ecc71;font-weight:bold">Riva del Garda — Airbnb</div>
-            <div style="font-size:0.7rem;color:#888">Mardi 8 → Mercredi 9 avril · 1 nuit</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="font-size:1.8em">🏠</span>
+          <div style="flex:1">
+            <div style="font-size:0.9rem;color:#2ecc71;font-weight:bold">Queen Of The Lake — Studio</div>
+            <div style="font-size:0.72rem;color:#888">Riva del Garda · Hôte : 1Dest · ★ 4.39 (162 avis)</div>
           </div>
-          <span style="margin-left:auto;background:#2ecc71;color:#111;padding:2px 8px;border-radius:10px;font-size:0.7rem;font-weight:bold">✅ CONFIRMÉ</span>
+          <span style="background:#2ecc71;color:#111;padding:2px 8px;border-radius:10px;font-size:0.7rem;font-weight:bold;white-space:nowrap">✅ CONFIRMÉ</span>
         </div>
-        <div style="font-size:0.75rem;color:#bbb;line-height:1.6">
-          📍 Riva del Garda, Lac de Garde, Trentin-Haut-Adige<br>
-          🚴 Parfait pour arriver après la piste Ponale<br>
-          🚗 Retour direct Riva → Morez le 9 avril (au lieu de Lugano)
+        <div style="font-size:0.78rem;color:#ccc;line-height:1.7;background:#0f3460;border-radius:6px;padding:8px">
+          📅 <strong>Mardi 8 → Mercredi 9 avril</strong> · 1 nuit<br>
+          📍 Riva del Garda, Trentin-Haut-Adige, Lac de Garde<br>
+          👥 Capacité : 4 voyageurs · 1 chambre · 3 lits · 1 SDB<br>
+          🔑 Arrivée autonome (boîte à clé)<br>
+          🐾 Animaux acceptés<br>
+          🚴 À 5 min du départ du Sentiero del Ponale<br>
+          🚗 <strong>Retour direct Riva → Morez le 9 avril</strong>
         </div>
         <div style="margin-top:8px">
           <span class="chip green">📅 8-9 avril</span>
-          <span class="chip blue">🏊 Lac de Garde</span>
-          <span class="chip orange">🚴 Ponale nearby</span>
+          <span class="chip blue">🏊 Bord du Lac de Garde</span>
+          <span class="chip orange">🚴 Ponale à côté</span>
+          <span class="chip" style="border:1px solid #9b59b6;color:#9b59b6">⭐ 4.39/5</span>
         </div>
       </div>
 
@@ -468,7 +473,7 @@ async function draw() {
     { p:[45.8180,9.0700], i:'🚡', t:'Funiculaire Côme → Brunate', d:'3.80€/pers, vue panoramique' },
     { p:[45.8566,9.3954], i:'🛏️', t:'Nuit 4 — Lecco', d:'Lundi 7 avril' },
     { p:[45.8128,10.7927], i:'🌟', t:'Limone sul Garda', d:'Départ piste suspendue Ponale !' },
-    { p:[45.8912,10.8404], i:'🛏️', t:'Nuit 5 — Riva del Garda', d:'Mardi 8 avril — Paradis du vélo' },
+    { p:[45.8912,10.8404], i:'🏠', t:'Nuit 5 — Riva del Garda ✅ Airbnb', d:'Mardi 8 avril · Queen Of The Lake Studio · ★4.39 · 4 voyageurs · Hôte: 1Dest' },
     { p:[46.0037,8.9511], i:'📍', t:'Lugano', d:'Balade quais + retour Morez' },
     // Restaurants
     { p:[45.7989,8.4100], i:'🍽️', t:'Ristorante Venus', d:'Orta San Giulio — vue île, poissons du lac' },
