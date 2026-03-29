@@ -16,7 +16,7 @@
     }
     #header h1 { font-size: 1.3em; }
     #header p { font-size: 0.85em; opacity: 0.85; }
-    #map { height: calc(100vh - 120px); width: 100%; }
+    #map { height: calc(100vh - 70px); width: 100%; }
     #legend {
       position: absolute; bottom: 30px; right: 10px; z-index: 1000;
       background: white; border-radius: 12px; padding: 14px;
@@ -24,8 +24,12 @@
     }
     #legend h3 { font-size: 0.9em; color: #333; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 6px; }
     .legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.82em; }
-    .legend-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
     .legend-line { width: 24px; height: 4px; border-radius: 2px; flex-shrink: 0; }
+    #loading {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      z-index: 2000; background: white; padding: 20px 30px; border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2); text-align: center; font-size: 0.95em;
+    }
   </style>
 </head>
 <body>
@@ -33,122 +37,116 @@
   <div style="font-size:2em">🚴‍♂️</div>
   <div>
     <h1>Road Trip — Lacs Italiens à Vélo</h1>
-    <p>4 → 9 Avril 2026 • Morez (Jura) → Orta → Majeur → Côme → Garde → Lugano</p>
+    <p>4 → 9 Avril 2026 • Morez → Orta → Lac Majeur → Côme → Lac de Garde → Lugano</p>
   </div>
 </div>
 <div style="position:relative">
   <div id="map"></div>
+  <div id="loading">🗺️ Calcul des routes en cours…</div>
   <div id="legend">
     <h3>🗺️ Légende</h3>
-    <div class="legend-item"><div class="legend-line" style="background:#e74c3c"></div>Itinéraire route</div>
+    <div class="legend-item"><div class="legend-line" style="background:#e74c3c"></div>Route voiture</div>
     <div class="legend-item"><div class="legend-line" style="background:#2ecc71"></div>Piste cyclable</div>
-    <div class="legend-item"><div class="legend-line" style="background:#3498db; border-top: 2px dashed #3498db; background:transparent"></div>Ferry</div>
+    <div class="legend-item"><div class="legend-line" style="background:#3498db; border-top:2px dashed #3498db; background:transparent; height:0; border-bottom:none"></div>Ferry</div>
     <hr style="margin:8px 0; border:none; border-top:1px solid #eee">
-    <div class="legend-item"><div class="legend-dot" style="background:#e74c3c"></div>Nuit</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#f39c12"></div>Point d'intérêt</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#2ecc71"></div>Départ / Arrivée</div>
+    <div class="legend-item">🏠 Départ / Arrivée</div>
+    <div class="legend-item">🛏️ Nuit</div>
+    <div class="legend-item">📍 Point d'intérêt</div>
+    <div class="legend-item">🌟 Incontournable</div>
   </div>
 </div>
 
 <script>
-const map = L.map('map').setView([45.85, 8.95], 8);
-
+const map = L.map('map').setView([45.85, 9.2], 8);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap contributors',
-  maxZoom: 18
+  attribution: '© OpenStreetMap contributors', maxZoom: 18
 }).addTo(map);
 
-// === ITINÉRAIRE ROUTE ===
-const route = [
-  [46.6749, 6.1561], // Morez
-  [46.1146, 8.2923], // Domodossola (via Simplon)
-  [45.9240, 8.5523], // Verbania
-  [45.8789, 8.4089], // Omegna / Lac Orta
-  [45.7545, 8.5595], // Arona
-  [45.8850, 8.5280], // Stresa
-  [45.8141, 9.0852], // Côme
-  [45.8566, 9.3954], // Lecco
-  [45.8128, 10.7927], // Limone sul Garda
-  [45.8912, 10.8404], // Riva del Garda
-  [46.0037, 8.9511], // Lugano
-  [46.6749, 6.1561], // Retour Morez
-];
+// Fonction OSRM routing
+async function getRoute(waypoints, profile = 'driving') {
+  const coords = waypoints.map(p => `${p[1]},${p[0]}`).join(';');
+  const url = `https://router.project-osrm.org/route/v1/${profile}/${coords}?overview=full&geometries=geojson`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.routes && data.routes[0]) {
+      return data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+    }
+  } catch(e) { console.warn('OSRM error:', e); }
+  return waypoints; // fallback ligne droite
+}
 
-L.polyline(route, { color: '#e74c3c', weight: 3, dashArray: '8,5', opacity: 0.8 })
-  .addTo(map)
-  .bindPopup('🚗 Itinéraire routier');
+async function drawAllRoutes() {
+  // === ROUTE VOITURE — segments journaliers ===
+  const routeSegments = [
+    { name: 'Morez → Domodossola (via Simplon)', points: [[46.6749,6.1561],[46.1146,8.2923]], color: '#e74c3c', popup: '🚗 Vendredi soir — Morez → Domodossola<br>~3h45 via le col du Simplon' },
+    { name: 'Domodossola → Lac Orta', points: [[46.1146,8.2923],[45.9240,8.5523],[45.8789,8.4089]], color: '#e74c3c', popup: '🚗 Samedi matin — vers Omegna / Lac d\'Orta' },
+    { name: 'Lac Orta → Arona/Stresa', points: [[45.7989,8.4206],[45.7545,8.5595]], color: '#e74c3c', popup: '🚗 Samedi soir — vers Arona/Stresa' },
+    { name: 'Stresa → Côme', points: [[45.8850,8.5280],[45.8141,9.0852]], color: '#e74c3c', popup: '🚗 Dimanche — Stresa → Côme (après ferry)' },
+    { name: 'Côme → Lecco', points: [[45.8141,9.0852],[45.8566,9.3954]], color: '#e74c3c', popup: '🚗 Lundi — Côme → Lecco' },
+    { name: 'Lecco → Limone sul Garda', points: [[45.8566,9.3954],[45.8128,10.7927]], color: '#e74c3c', popup: '🚗 Mardi matin — Lecco → Limone sul Garda' },
+    { name: 'Riva del Garda → Lugano', points: [[45.8912,10.8404],[46.0037,8.9511]], color: '#e74c3c', popup: '🚗 Mercredi matin — Riva → Lugano' },
+    { name: 'Lugano → Morez', points: [[46.0037,8.9511],[46.6749,6.1561]], color: '#e74c3c', popup: '🚗 Mercredi après-midi — Lugano → Morez<br>via Gothard ou Simplon' },
+  ];
 
-// === PISTES CYCLABLES ===
-// Lac Orta
-L.polyline([
-  [45.8789, 8.4089], [45.8500, 8.4020], [45.8200, 8.3950],
-  [45.7900, 8.4050], [45.7989, 8.4206]
-], { color: '#2ecc71', weight: 4 }).addTo(map).bindPopup('🚴 Lac d\'Orta — ~25 km');
+  // === PISTES CYCLABLES ===
+  const veloPistes = [
+    { name: 'Lac d\'Orta — Omegna → Orta', points: [[45.8789,8.4089],[45.8500,8.4020],[45.8200,8.3950],[45.7989,8.4206]], color: '#2ecc71', popup: '🚴 Lac d\'Orta — ~25 km, facile, familial<br>Rive ouest + Orta San Giulio' },
+    { name: 'Lac Majeur — Arona → Stresa', points: [[45.7545,8.5595],[45.8100,8.5250],[45.8850,8.5280]], color: '#2ecc71', popup: '🚴 Lac Majeur — Arona → Stresa<br>~30 km, plat, longe le lac' },
+    { name: 'Piste Adda — Lecco', points: [[45.8566,9.3954],[45.8200,9.4100],[45.7600,9.4350],[45.7000,9.4600]], color: '#2ecc71', popup: '🚴 Piste de l\'Adda (Lecco)<br>~20 km, plat, très sécurisé familles' },
+    { name: 'Sentiero del Ponale — Limone', points: [[45.8128,10.7927],[45.8230,10.7860],[45.8350,10.7820]], color: '#f39c12', popup: '🌟 Sentiero del Ponale — PISTE SUSPENDUE<br>~5 km A/R, 10 km/h max, spectaculaire !' },
+    { name: 'Quais Lugano', points: [[46.0037,8.9511],[45.9820,8.9280],[45.9600,8.9150]], color: '#2ecc71', popup: '🚴 Quais de Lugano — ~10 km, plat' },
+  ];
 
-// Lac Majeur
-L.polyline([
-  [45.7545, 8.5595], [45.7700, 8.5450], [45.8100, 8.5250],
-  [45.8500, 8.5180], [45.8850, 8.5280]
-], { color: '#2ecc71', weight: 4 }).addTo(map).bindPopup('🚴 Lac Majeur — Arona → Stresa ~30 km');
+  // Dessiner routes voiture via OSRM
+  for (const seg of routeSegments) {
+    const route = await getRoute(seg.points, 'driving');
+    L.polyline(route, { color: seg.color, weight: 4, opacity: 0.85 })
+      .addTo(map).bindPopup(seg.popup);
+  }
 
-// Lac Côme - Adda
-L.polyline([
-  [45.8566, 9.3954], [45.8200, 9.4100], [45.7600, 9.4350], [45.7000, 9.4600]
-], { color: '#2ecc71', weight: 4 }).addTo(map).bindPopup('🚴 Piste Adda (Lecco) — ~20 km');
+  // Dessiner pistes vélo via OSRM cycling
+  for (const piste of veloPistes) {
+    const route = await getRoute(piste.points, 'cycling');
+    L.polyline(route, { color: piste.color, weight: 5, opacity: 0.9 })
+      .addTo(map).bindPopup(piste.popup);
+  }
 
-// Lac de Garde - Piste suspendue
-L.polyline([
-  [45.8128, 10.7927], [45.8230, 10.7860], [45.8350, 10.7820]
-], { color: '#f39c12', weight: 5 }).addTo(map).bindPopup('🌟 Sentiero del Ponale — Piste SUSPENDUE ! ~5 km A/R');
+  // Ferry
+  L.polyline([[45.8850,8.5280],[45.9300,8.6200]], {
+    color: '#3498db', weight: 3, dashArray: '8,6', opacity: 0.8
+  }).addTo(map).bindPopup('⛴️ Ferry Stresa → Laveno (vélos acceptés)<br>Navigazione Laghi — réserver à l\'avance');
 
-// Lugano
-L.polyline([
-  [46.0037, 8.9511], [45.9820, 8.9280], [45.9600, 8.9150]
-], { color: '#2ecc71', weight: 4 }).addTo(map).bindPopup('🚴 Quais Lugano — ~10 km');
+  // === MARQUEURS ===
+  const markers = [
+    { pos: [46.6749,6.1561], icon: '🏠', title: 'Morez', desc: 'Départ vendredi soir → Retour mercredi soir' },
+    { pos: [46.1146,8.2923], icon: '🛏️', title: 'Nuit 1 — Domodossola', desc: 'Vendredi 4 avril<br>Passage via le col du Simplon' },
+    { pos: [45.8789,8.4089], icon: '🚴', title: 'Omegna', desc: 'Départ vélo — Tour du lac d\'Orta' },
+    { pos: [45.7989,8.4206], icon: '📍', title: 'Orta San Giulio', desc: 'Village médiéval + bateau île San Giulio (~4€/pers)' },
+    { pos: [45.7960,8.4150], icon: '🏝️', title: 'Île San Giulio', desc: 'Basilique romane — laisser les vélos à quai' },
+    { pos: [45.7545,8.5595], icon: '🛏️', title: 'Nuit 2 — Arona/Stresa', desc: 'Samedi 5 avril' },
+    { pos: [45.7630,8.5550], icon: '📍', title: 'Colosse San Carlo', desc: 'Statue de 35m, vue sur le lac Majeur' },
+    { pos: [45.8989,8.5020], icon: '🏝️', title: 'Isola Bella', desc: 'Île Borromée, jardins baroques<br>Ferry depuis Stresa' },
+    { pos: [45.8850,8.5280], icon: '⛴️', title: 'Stresa — Embarcadère', desc: 'Ferry vers Laveno (vélos acceptés)<br>navigazionelaghi.it' },
+    { pos: [45.8141,9.0852], icon: '🛏️', title: 'Nuit 3 — Côme', desc: 'Dimanche 6 avril' },
+    { pos: [45.8180,9.0700], icon: '🚡', title: 'Funiculaire de Côme', desc: 'Côme → Brunate — 7 min, 3.80€/pers<br>Vue panoramique sur le lac' },
+    { pos: [45.8566,9.3954], icon: '🛏️', title: 'Nuit 4 — Lecco', desc: 'Lundi 7 avril' },
+    { pos: [45.8128,10.7927], icon: '🌟', title: 'Limone sul Garda', desc: 'Départ Sentiero del Ponale<br>Piste suspendue spectaculaire !' },
+    { pos: [45.8350,10.7820], icon: '🌟', title: 'Capo Reamol', desc: 'Fin piste suspendue<br>Vue imprenable sur le lac de Garde' },
+    { pos: [45.8912,10.8404], icon: '🛏️', title: 'Nuit 5 — Riva del Garda', desc: 'Mardi 8 avril — Paradis du vélo !' },
+    { pos: [46.0037,8.9511], icon: '📍', title: 'Lugano', desc: 'Quais du lac, vieille ville<br>Balade vélo le long du lac' },
+  ];
 
-// === FERRY ===
-L.polyline([
-  [45.8850, 8.5280], [45.9300, 8.6200]
-], { color: '#3498db', weight: 3, dashArray: '5,8' })
-  .addTo(map).bindPopup('⛴️ Ferry Stresa → Laveno (vélos acceptés)');
+  markers.forEach(m => {
+    L.marker(m.pos, {
+      icon: L.divIcon({ html: `<div style="font-size:22px;filter:drop-shadow(1px 1px 2px rgba(0,0,0,0.5))">${m.icon}</div>`, className: '', iconSize: [28,28], iconAnchor: [14,14] })
+    }).addTo(map).bindPopup(`<b>${m.title}</b><br>${m.desc}`);
+  });
 
-// === MARQUEURS ===
-const iconNuit = L.divIcon({ html: '🛏️', className: '', iconSize: [24,24] });
-const iconPoi = L.divIcon({ html: '📍', className: '', iconSize: [24,24] });
-const iconVelo = L.divIcon({ html: '🚴', className: '', iconSize: [24,24] });
-const iconDepart = L.divIcon({ html: '🏠', className: '', iconSize: [24,24] });
+  document.getElementById('loading').style.display = 'none';
+}
 
-// Départ/Arrivée
-L.marker([46.6749, 6.1561], {icon: iconDepart}).addTo(map)
-  .bindPopup('<b>Morez</b><br>Départ vendredi soir → Retour mercredi soir');
-
-// Nuits
-L.marker([46.1146, 8.2923], {icon: iconNuit}).addTo(map)
-  .bindPopup('<b>🌙 Nuit 1</b><br>Domodossola ou Verbania<br>Vendredi 4 avril');
-L.marker([45.7545, 8.5595], {icon: iconNuit}).addTo(map)
-  .bindPopup('<b>🌙 Nuit 2</b><br>Arona / Stresa<br>Samedi 5 avril');
-L.marker([45.8141, 9.0852], {icon: iconNuit}).addTo(map)
-  .bindPopup('<b>🌙 Nuit 3</b><br>Côme / Varese<br>Dimanche 6 avril');
-L.marker([45.8566, 9.3954], {icon: iconNuit}).addTo(map)
-  .bindPopup('<b>🌙 Nuit 4</b><br>Côme / Lecco<br>Lundi 7 avril');
-L.marker([45.8912, 10.8404], {icon: iconNuit}).addTo(map)
-  .bindPopup('<b>🌙 Nuit 5</b><br>Riva del Garda / Rovereto<br>Mardi 8 avril');
-
-// Points d'intérêt
-L.marker([45.7989, 8.4206], {icon: iconPoi}).addTo(map)
-  .bindPopup('<b>⛵ Orta San Giulio</b><br>Village médiéval + bateau île San Giulio (~4€/pers)');
-L.marker([45.7960, 8.4150], {icon: iconPoi}).addTo(map)
-  .bindPopup('<b>🏝️ Île San Giulio</b><br>Basilique romane, promenade du silence');
-L.marker([45.7630, 8.5550], {icon: iconPoi}).addTo(map)
-  .bindPopup('<b>🗿 Colosse San Carlo Borromeo</b><br>Statue de 35m, vue sur le lac Majeur');
-L.marker([45.8989, 8.5020], {icon: iconPoi}).addTo(map)
-  .bindPopup('<b>🏝️ Isola Bella</b><br>Île Borromée, jardins baroques, ferry depuis Stresa');
-L.marker([45.8180, 9.0700], {icon: iconPoi}).addTo(map)
-  .bindPopup('<b>🚡 Funiculaire de Côme → Brunate</b><br>7 min, 3.80€/pers, vue panoramique sur le lac');
-L.marker([45.8128, 10.7927], {icon: iconVelo}).addTo(map)
-  .bindPopup('<b>🌟 Limone sul Garda</b><br>Départ piste suspendue Sentiero del Ponale<br>Spectaculaire, 10 km/h max, gratuit');
-L.marker([46.0037, 8.9511], {icon: iconPoi}).addTo(map)
-  .bindPopup('<b>🇨🇭 Lugano</b><br>Quais du lac, vieille ville, cafés');
+drawAllRoutes();
 </script>
 </body>
 </html>
