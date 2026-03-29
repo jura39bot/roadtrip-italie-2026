@@ -37,6 +37,9 @@
     .chip.orange { border: 1px solid #f39c12; color: #f39c12; }
     .chip.blue { border: 1px solid #3498db; color: #3498db; }
     .chip.red { border: 1px solid #e74c3c; color: #e74c3c; }
+    #fullscreen-btn { position: absolute; top: 10px; right: 10px; z-index: 1000; background: #16213e; color: #2ecc71; border: 2px solid #2ecc71; border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+    #fullscreen-btn:hover { background: #2ecc71; color: #111; }
+    :fullscreen #map, :-webkit-full-screen #map { height: 100vh; width: 100vw; }
     .velo-card { background: #1a1a2e; border-radius: 8px; padding: 10px; margin: 6px 0; border-left: 3px solid #2ecc71; }
     .velo-card h4 { color: #2ecc71; font-size: 0.82rem; margin-bottom: 4px; }
     .velo-card p { font-size: 0.72rem; color: #bbb; }
@@ -57,15 +60,17 @@
   <div class="badge">5 nuits • 6 jours</div>
 </header>
 <div class="main">
-  <div style="position:relative; flex:1">
+  <div style="position:relative; flex:1" id="map-container">
     <div id="map"></div>
     <div id="loading">🗺️ Calcul des routes…</div>
+    <button id="fullscreen-btn" onclick="toggleFullscreen()">⛶ Plein écran</button>
   </div>
   <div class="sidebar">
     <div class="tabs">
       <div class="tab active" onclick="showTab('programme')">📅 Programme</div>
       <div class="tab" onclick="showTab('velo')">🚴 Vélo</div>
       <div class="tab" onclick="showTab('restos')">🍽️ Restos</div>
+      <div class="tab" onclick="showTab('airbnb')">🏠 Airbnb</div>
     </div>
 
     <!-- PROGRAMME -->
@@ -310,6 +315,76 @@
         <div style="margin-top:5px"><span class="chip orange">€€€</span><span class="chip green">🌅 Vue lac</span></div>
       </div>
 
+    <!-- AIRBNB -->
+    <div class="tab-content" id="tab-airbnb">
+      <div class="section-title">🏠 Hébergements réservés</div>
+
+      <div style="background:#0f3460;border-radius:10px;padding:12px;margin-bottom:10px;border-left:4px solid #9b59b6">
+        <div style="font-size:0.82rem;color:#9b59b6;font-weight:bold;margin-bottom:6px">📅 Récapitulatif nuits</div>
+        <table style="width:100%;font-size:0.72rem;border-collapse:collapse;color:#ccc">
+          <tr style="color:#888;font-size:0.68rem"><td>Nuit</td><td>Lieu</td><td style="text-align:right">Statut</td></tr>
+          <tr><td>Ven 4 → Sam 5</td><td>Domodossola</td><td style="text-align:right;color:#888">À réserver</td></tr>
+          <tr><td>Sam 5 → Dim 6</td><td>Arona / Stresa</td><td style="text-align:right;color:#888">À réserver</td></tr>
+          <tr><td>Dim 6 → Lun 7</td><td>Côme / Varese</td><td style="text-align:right;color:#888">À réserver</td></tr>
+          <tr><td>Lun 7 → Mar 8</td><td>Côme / Lecco</td><td style="text-align:right;color:#888">À réserver</td></tr>
+          <tr style="color:#2ecc71;font-weight:bold"><td>Mar 8 → Mer 9</td><td>Riva del Garda</td><td style="text-align:right">✅ Réservé</td></tr>
+        </table>
+      </div>
+
+      <div class="section-title">✅ Réservations confirmées</div>
+
+      <div style="background:#1a1a2e;border-radius:8px;padding:12px;margin:6px 0;border-left:4px solid #2ecc71">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font-size:1.4em">🏠</span>
+          <div>
+            <div style="font-size:0.85rem;color:#2ecc71;font-weight:bold">Riva del Garda — Airbnb</div>
+            <div style="font-size:0.7rem;color:#888">Mardi 8 → Mercredi 9 avril · 1 nuit</div>
+          </div>
+          <span style="margin-left:auto;background:#2ecc71;color:#111;padding:2px 8px;border-radius:10px;font-size:0.7rem;font-weight:bold">✅ CONFIRMÉ</span>
+        </div>
+        <div style="font-size:0.75rem;color:#bbb;line-height:1.6">
+          📍 Riva del Garda, Lac de Garde, Trentin-Haut-Adige<br>
+          🚴 Parfait pour arriver après la piste Ponale<br>
+          🚗 Retour direct Riva → Morez le 9 avril (au lieu de Lugano)
+        </div>
+        <div style="margin-top:8px">
+          <span class="chip green">📅 8-9 avril</span>
+          <span class="chip blue">🏊 Lac de Garde</span>
+          <span class="chip orange">🚴 Ponale nearby</span>
+        </div>
+      </div>
+
+      <div class="section-title">📌 Suggestions non réservées</div>
+
+      <div style="background:#1a1a2e;border-radius:8px;padding:10px;margin:6px 0;border-left:3px solid #888">
+        <div style="font-size:0.82rem;color:#aaa;font-weight:bold">🏠 Domodossola / Verbania — Nuit 1</div>
+        <div style="font-size:0.72rem;color:#888;margin-top:4px">Vendredi 4 avril (arrivée tard ~22h). Hôtel simple ou Airbnb. Budget ~60-80€/nuit.</div>
+        <div style="margin-top:5px"><span class="chip" style="border:1px solid #666;color:#888">📅 4-5 avril</span></div>
+      </div>
+
+      <div style="background:#1a1a2e;border-radius:8px;padding:10px;margin:6px 0;border-left:3px solid #888">
+        <div style="font-size:0.82rem;color:#aaa;font-weight:bold">🏠 Arona / Stresa — Nuit 2</div>
+        <div style="font-size:0.72rem;color:#888;margin-top:4px">Samedi 5 avril. Stresa = plus touristique mais vue lac exceptionnelle. Budget ~80-100€.</div>
+        <div style="margin-top:5px"><span class="chip" style="border:1px solid #666;color:#888">📅 5-6 avril</span></div>
+      </div>
+
+      <div style="background:#1a1a2e;border-radius:8px;padding:10px;margin:6px 0;border-left:3px solid #888">
+        <div style="font-size:0.82rem;color:#aaa;font-weight:bold">🏠 Côme / Varese — Nuit 3</div>
+        <div style="font-size:0.72rem;color:#888;margin-top:4px">Dimanche 6 avril. Côme = central mais cher. Varese = moins cher, bon accès. Budget ~70-90€.</div>
+        <div style="margin-top:5px"><span class="chip" style="border:1px solid #666;color:#888">📅 6-7 avril</span></div>
+      </div>
+
+      <div style="background:#1a1a2e;border-radius:8px;padding:10px;margin:6px 0;border-left:3px solid #888">
+        <div style="font-size:0.82rem;color:#aaa;font-weight:bold">🏠 Côme / Lecco — Nuit 4</div>
+        <div style="font-size:0.72rem;color:#888;margin-top:4px">Lundi 7 avril. Lecco = plus calme et moins cher que Côme. Vue sur les Cornes. Budget ~70-90€.</div>
+        <div style="margin-top:5px"><span class="chip" style="border:1px solid #666;color:#888">📅 7-8 avril</span></div>
+      </div>
+
+      <div style="margin-top:12px;background:#0f3460;border-radius:8px;padding:10px;font-size:0.73rem;color:#888;line-height:1.6">
+        💡 <strong style="color:#aaa">Astuce :</strong> En avril, book au moins 3 semaines à l'avance pour Stresa et le Lac de Garde. Les prix montent vite en période de vacances de Pâques.
+      </div>
+    </div>
+
     </div>
   </div>
 </div>
@@ -317,7 +392,7 @@
 <script>
 function showTab(name) {
   document.querySelectorAll('.tab').forEach((t,i) => {
-    const names = ['programme','velo','restos'];
+    const names = ['programme','velo','restos','airbnb'];
     t.classList.toggle('active', names[i] === name);
   });
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -414,6 +489,27 @@ async function draw() {
 }
 
 draw();
+
+function toggleFullscreen() {
+  const container = document.getElementById('map-container');
+  if (!document.fullscreenElement) {
+    container.requestFullscreen().then(() => {
+      document.getElementById('fullscreen-btn').textContent = '✕ Quitter';
+      setTimeout(() => map.invalidateSize(), 300);
+    });
+  } else {
+    document.exitFullscreen().then(() => {
+      document.getElementById('fullscreen-btn').textContent = '⛶ Plein écran';
+      setTimeout(() => map.invalidateSize(), 300);
+    });
+  }
+}
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement) {
+    document.getElementById('fullscreen-btn').textContent = '⛶ Plein écran';
+    setTimeout(() => map.invalidateSize(), 300);
+  }
+});
 </script>
 </body>
 </html>
