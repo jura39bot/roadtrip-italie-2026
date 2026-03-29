@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Béthanie - Road Trip Italie 2026"
+  xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>Lac d'Orta — Omegna → Orta San Giulio</name>
+    <desc>Tour du lac d'Orta, ~25 km, facile, familial. Rive ouest puis Orta San Giulio.</desc>
+    <time>2026-04-05T09:00:00Z</time>
+  </metadata>
+  <trk>
+    <name>Lac d'Orta — Omegna → Orta San Giulio</name>
+    <trkseg>
+      <!-- Omegna - départ -->
+      <trkpt lat="45.8789" lon="8.4089"><ele>295</ele><name>Omegna - Départ</name></trkpt>
+      <trkpt lat="45.8650" lon="8.4050"><ele>294</ele></trkpt>
+      <trkpt lat="45.8500" lon="8.4020"><ele>293</ele></trkpt>
+      <!-- Pella - rive ouest -->
+      <trkpt lat="45.8200" lon="8.3950"><ele>295</ele><name>Pella</name></trkpt>
+      <trkpt lat="45.8000" lon="8.3980"><ele>296</ele></trkpt>
+      <trkpt lat="45.7900" lon="8.4050"><ele>295</ele></trkpt>
+      <!-- Orta San Giulio -->
+      <trkpt lat="45.7989" lon="8.4206"><ele>294</ele><name>Orta San Giulio</name></trkpt>
+    </trkseg>
+  </trk>
+  <wpt lat="45.7989" lon="8.4206">
+    <name>Orta San Giulio</name>
+    <desc>Village médiéval, embarcadère pour l'île San Giulio (5 min en bateau, ~4€/pers)</desc>
+  </wpt>
+  <wpt lat="45.7960" lon="8.4150">
+    <name>Île San Giulio</name>
+    <desc>Île mystique avec basilique romane. Laisser les vélos à quai.</desc>
+  </wpt>
+  <wpt lat="45.8789" lon="8.4089">
+    <name>Omegna - Départ</name>
+    <desc>Point de départ. Parking vélos disponible près du lac.</desc>
+  </wpt>
+</gpx>

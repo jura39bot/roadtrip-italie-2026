@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Béthanie - Road Trip Italie 2026"
+  xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>Lac de Côme — Piste de l'Adda (Lecco)</name>
+    <desc>Piste cyclable rivière Adda au sud de Lecco. ~20 km, plat, très sécurisé pour familles.</desc>
+    <time>2026-04-07T09:00:00Z</time>
+  </metadata>
+  <trk>
+    <name>Piste cyclable Adda — Lecco</name>
+    <trkseg>
+      <trkpt lat="45.8566" lon="9.3954"><ele>200</ele><name>Lecco - Départ</name></trkpt>
+      <trkpt lat="45.8200" lon="9.4100"><ele>198</ele></trkpt>
+      <trkpt lat="45.7900" lon="9.4200"><ele>196</ele></trkpt>
+      <trkpt lat="45.7600" lon="9.4350"><ele>194</ele></trkpt>
+      <trkpt lat="45.7300" lon="9.4500"><ele>193</ele></trkpt>
+      <trkpt lat="45.7000" lon="9.4600"><ele>193</ele><name>Brivio</name></trkpt>
+    </trkseg>
+  </trk>
+  <wpt lat="45.8566" lon="9.3954">
+    <name>Lecco</name>
+    <desc>Ville de Lecco, départ piste Adda. Vue sur les Cornes de Lecco.</desc>
+  </wpt>
+  <wpt lat="45.8141" lon="9.0852">
+    <name>Côme — Funiculaire</name>
+    <desc>Funiculaire de Côme → Brunate (7 min, 3.80€/pers). Vue panoramique sur le lac.</desc>
+  </wpt>
+</gpx>
