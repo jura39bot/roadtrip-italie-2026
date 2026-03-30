@@ -69,6 +69,7 @@
       <div class="tab" onclick="showTab('velo')">🚴 Vélo</div>
       <div class="tab" onclick="showTab('restos')">🍽️ Restos</div>
       <div class="tab" onclick="showTab('airbnb')">🏠 Airbnb</div>
+      <div class="tab" onclick="showTab('nav')">🧭 Nav</div>
     </div>
 
     <!-- PROGRAMME -->
@@ -428,6 +429,81 @@
       </div>
     </div>
 
+    <!-- NAV -->
+    <div class="tab-content" id="tab-nav">
+      <div class="section-title">🧭 Navigation par jour</div>
+
+      <div style="background:#0f3460;border-radius:8px;padding:10px;margin-bottom:10px;font-size:0.72rem;color:#aaa;line-height:1.6">
+        ℹ️ <strong>Waze</strong> : ouvre directement la destination dans Waze.<br>
+        📥 <strong>GPX</strong> : télécharge le fichier pour OsmAnd, Komoot, Garmin.
+      </div>
+
+      <!-- Jour 0 -->
+      <div style="background:#1a1a2e;border-radius:8px;padding:10px;margin:6px 0;border-left:4px solid #e74c3c">
+        <div style="font-size:0.82rem;color:#fff;font-weight:bold;margin-bottom:6px">🚗 Jour 0 — Ven 4 avril soir</div>
+        <div style="font-size:0.75rem;color:#aaa;margin-bottom:8px">Morez → Col du Simplon → Domodossola · 274 km · 4h</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <a href="https://waze.com/ul?ll=46.1146,8.2923&navigate=yes" target="_blank" style="background:#33ccff;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">🗺️ Waze → Domodossola</a>
+          <a href="nav/jour0-morez-domodossola.gpx" download style="background:#2ecc71;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">📥 GPX Jour 0</a>
+        </div>
+      </div>
+
+      <!-- Jour 1 -->
+      <div style="background:#1a1a2e;border-radius:8px;padding:10px;margin:6px 0;border-left:4px solid #2ecc71">
+        <div style="font-size:0.82rem;color:#fff;font-weight:bold;margin-bottom:6px">🚴 Jour 1 — Sam 5 avril</div>
+        <div style="font-size:0.75rem;color:#aaa;margin-bottom:8px">Domodossola → Omegna → Orta San Giulio → Baveno · 61 km voiture + 25 km vélo</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <a href="https://waze.com/ul?ll=45.8789,8.4089&navigate=yes" target="_blank" style="background:#33ccff;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">🗺️ Waze → Omegna</a>
+          <a href="https://waze.com/ul?ll=45.9100,8.4700&navigate=yes" target="_blank" style="background:#33ccff;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">🗺️ Waze → Baveno</a>
+          <a href="nav/jour1-domodossola-lac-orta-baveno.gpx" download style="background:#2ecc71;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">📥 GPX Jour 1</a>
+        </div>
+      </div>
+
+      <!-- Jour 2 -->
+      <div style="background:#1a1a2e;border-radius:8px;padding:10px;margin:6px 0;border-left:4px solid #3498db">
+        <div style="font-size:0.82rem;color:#fff;font-weight:bold;margin-bottom:6px">⛴️ Jour 2 — Dim 6 avril</div>
+        <div style="font-size:0.75rem;color:#aaa;margin-bottom:8px">Baveno → Stresa → Ferry → Laveno → Valmadrera · 90 km + 30 km vélo</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <a href="https://waze.com/ul?ll=45.8850,8.5280&navigate=yes" target="_blank" style="background:#33ccff;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">🗺️ Waze → Stresa Ferry</a>
+          <a href="https://waze.com/ul?ll=45.8400,9.3700&navigate=yes" target="_blank" style="background:#33ccff;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">🗺️ Waze → Valmadrera</a>
+          <a href="nav/jour2-baveno-lac-majeur-valmadrera.gpx" download style="background:#2ecc71;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">📥 GPX Jour 2</a>
+        </div>
+      </div>
+
+      <!-- Jour 3 -->
+      <div style="background:#1a1a2e;border-radius:8px;padding:10px;margin:6px 0;border-left:4px solid #9b59b6">
+        <div style="font-size:0.82rem;color:#fff;font-weight:bold;margin-bottom:6px">🚡 Jour 3 — Lun 7 avril</div>
+        <div style="font-size:0.75rem;color:#aaa;margin-bottom:8px">Valmadrera → Côme → Lecco · 31 km + 20 km vélo piste Adda</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <a href="https://waze.com/ul?ll=45.8180,9.0700&navigate=yes" target="_blank" style="background:#33ccff;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">🗺️ Waze → Funiculaire Côme</a>
+          <a href="https://waze.com/ul?ll=45.8566,9.3954&navigate=yes" target="_blank" style="background:#33ccff;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">🗺️ Waze → Lecco</a>
+          <a href="nav/jour3-valmadrera-lac-come.gpx" download style="background:#2ecc71;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">📥 GPX Jour 3</a>
+        </div>
+      </div>
+
+      <!-- Jour 4 -->
+      <div style="background:#1a1a2e;border-radius:8px;padding:10px;margin:6px 0;border-left:4px solid #f39c12">
+        <div style="font-size:0.82rem;color:#fff;font-weight:bold;margin-bottom:6px">🌟 Jour 4 — Mar 8 avril</div>
+        <div style="font-size:0.75rem;color:#aaa;margin-bottom:8px">Valmadrera → Limone (Ponale ⭐) → Riva del Garda · 153 km</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <a href="https://waze.com/ul?ll=45.8128,10.7927&navigate=yes" target="_blank" style="background:#33ccff;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">🗺️ Waze → Limone Ponale</a>
+          <a href="https://waze.com/ul?ll=45.8912,10.8404&navigate=yes" target="_blank" style="background:#33ccff;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">🗺️ Waze → Riva del Garda</a>
+          <a href="nav/jour4-valmadrera-riva-del-garda.gpx" download style="background:#2ecc71;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">📥 GPX Jour 4</a>
+        </div>
+      </div>
+
+      <!-- Jour 5 -->
+      <div style="background:#1a1a2e;border-radius:8px;padding:10px;margin:6px 0;border-left:4px solid #e74c3c">
+        <div style="font-size:0.82rem;color:#fff;font-weight:bold;margin-bottom:6px">🏠 Jour 5 — Mer 9 avril — Retour</div>
+        <div style="font-size:0.75rem;color:#aaa;margin-bottom:8px">Riva → Ponale matin → Lugano → Morez · ~640 km retour</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <a href="https://waze.com/ul?ll=46.0037,8.9511&navigate=yes" target="_blank" style="background:#33ccff;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">🗺️ Waze → Lugano</a>
+          <a href="https://waze.com/ul?ll=46.5233,6.0244&navigate=yes" target="_blank" style="background:#33ccff;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">🗺️ Waze → Morez 🏠</a>
+          <a href="nav/jour5-riva-ponale-riva.gpx" download style="background:#2ecc71;color:#111;padding:5px 10px;border-radius:6px;font-size:0.72rem;font-weight:bold;text-decoration:none">📥 GPX Jour 5</a>
+        </div>
+      </div>
+    </div><!-- /tab-nav -->
+
     </div>
   </div>
 </div>
@@ -435,7 +511,7 @@
 <script>
 function showTab(name) {
   document.querySelectorAll('.tab').forEach((t,i) => {
-    const names = ['programme','velo','restos','airbnb'];
+    const names = ['programme','velo','restos','airbnb','nav'];
     t.classList.toggle('active', names[i] === name);
   });
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));

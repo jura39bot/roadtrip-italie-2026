@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Béthanie - Road Trip Italie 2026"
+  xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>Jour 0 — Morez → Domodossola</name>
+    <desc>Vendredi 4 avril soir. Via col du Simplon. ~274 km, ~4h.</desc>
+    <time>2026-04-03T19:00:00Z</time>
+  </metadata>
+  <rte>
+    <name>Morez → Domodossola via Simplon</name>
+    <rtept lat="46.5233" lon="6.0244"><name>Morez — Départ</name></rtept>
+    <rtept lat="46.3800" lon="6.2300"><name>Pontarlier</name></rtept>
+    <rtept lat="46.5150" lon="6.6330"><name>Lausanne</name></rtept>
+    <rtept lat="46.3200" lon="7.9800"><name>Brigue (Brig)</name></rtept>
+    <rtept lat="46.2500" lon="8.0350"><name>Col du Simplon (2005m)</name></rtept>
+    <rtept lat="46.1146" lon="8.2923"><name>Domodossola — Arrivée</name></rtept>
+  </rte>
+  <wpt lat="46.5233" lon="6.0244"><name>Morez</name><desc>Départ vendredi 4 avril soir</desc></wpt>
+  <wpt lat="46.2500" lon="8.0350"><name>Col du Simplon</name><desc>Alt. 2005m. Vignette suisse 40 CHF obligatoire.</desc></wpt>
+  <wpt lat="46.1146" lon="8.2923"><name>Domodossola</name><desc>Arrivée ~22h. Nuit Montescheno.</desc></wpt>
+</gpx>

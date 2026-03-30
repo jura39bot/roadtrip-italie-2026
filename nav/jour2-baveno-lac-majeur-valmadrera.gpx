@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Béthanie - Road Trip Italie 2026"
+  xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>Jour 2 — Baveno → Lac Majeur → Valmadrera</name>
+    <desc>Dimanche 6 avril. Vélo Arona-Stresa ~30 km, ferry Stresa-Laveno, voiture jusqu'à Valmadrera ~90 km.</desc>
+    <time>2026-04-06T09:00:00Z</time>
+  </metadata>
+  <rte>
+    <name>Baveno → Stresa → (ferry) → Laveno → Valmadrera</name>
+    <rtept lat="45.9100" lon="8.4700"><name>Baveno — Départ matin</name></rtept>
+    <rtept lat="45.8850" lon="8.5280"><name>Stresa — Embarcadère ferry</name></rtept>
+    <rtept lat="45.9300" lon="8.6200"><name>Laveno — Arrivée ferry</name></rtept>
+    <rtept lat="45.8400" lon="9.3700"><name>Valmadrera — Airbnb nuit 2-3</name></rtept>
+  </rte>
+  <wpt lat="45.8850" lon="8.5280"><name>Stresa — Ferry</name><desc>Ferry Stresa → Laveno. Vélos acceptés ~3€/vélo. Navigazionelaghi.it</desc></wpt>
+  <wpt lat="45.8989" lon="8.5020"><name>Isola Bella</name><desc>Option : visite jardins baroques depuis Stresa.</desc></wpt>
+  <wpt lat="45.9300" lon="8.6200"><name>Laveno</name><desc>Arrivée ferry. Reprendre voiture direction Côme/Lecco.</desc></wpt>
+  <wpt lat="45.8400" lon="9.3700"><name>Valmadrera — Airbnb</name><desc>Nuit 2 et 3 — Hôte : Germana. Lac de Côme côté Lecco.</desc></wpt>
+</gpx>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Béthanie - Road Trip Italie 2026"
+  xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>Jour 4 — Valmadrera → Limone → Riva del Garda</name>
+    <desc>Mardi 8 avril. Voiture ~153 km via Brescia, Sentiero del Ponale à Limone, nuit Riva del Garda.</desc>
+    <time>2026-04-08T09:00:00Z</time>
+  </metadata>
+  <rte>
+    <name>Valmadrera → Lecco → Brescia → Limone → Riva del Garda</name>
+    <rtept lat="45.8400" lon="9.3700"><name>Valmadrera — Départ matin</name></rtept>
+    <rtept lat="45.5500" lon="10.2200"><name>Brescia — Autoroute A4</name></rtept>
+    <rtept lat="45.8128" lon="10.7927"><name>Limone sul Garda — Sentiero del Ponale ⭐</name></rtept>
+    <rtept lat="45.8912" lon="10.8404"><name>Riva del Garda — Airbnb nuit 4</name></rtept>
+  </rte>
+  <wpt lat="45.8128" lon="10.7927"><name>Sentiero del Ponale ⭐</name><desc>Piste cyclable suspendue dans la falaise. ~5 km A/R. 10 km/h max. INCONTOURNABLE !</desc></wpt>
+  <wpt lat="45.8912" lon="10.8404"><name>Riva del Garda — Airbnb</name><desc>Nuit 4 — Lac de Garde. Départ Ponale possible le matin depuis ici aussi.</desc></wpt>
+</gpx>

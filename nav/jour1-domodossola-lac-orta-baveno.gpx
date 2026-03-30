@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Béthanie - Road Trip Italie 2026"
+  xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>Jour 1 — Domodossola → Lac d'Orta → Baveno</name>
+    <desc>Samedi 5 avril. ~61 km voiture + vélo ~25 km.</desc>
+    <time>2026-04-05T09:00:00Z</time>
+  </metadata>
+  <rte>
+    <name>Domodossola → Omegna → Orta → Baveno</name>
+    <rtept lat="46.1146" lon="8.2923"><name>Domodossola — Départ matin</name></rtept>
+    <rtept lat="45.8789" lon="8.4089"><name>Omegna — Départ vélo</name></rtept>
+    <rtept lat="45.7989" lon="8.4206"><name>Orta San Giulio + Île San Giulio</name></rtept>
+    <rtept lat="45.9100" lon="8.4700"><name>Baveno — Airbnb nuit 1</name></rtept>
+  </rte>
+  <wpt lat="45.8789" lon="8.4089"><name>Omegna</name><desc>Parking vélos, départ boucle lac d'Orta ~25 km</desc></wpt>
+  <wpt lat="45.7989" lon="8.4206"><name>Orta San Giulio</name><desc>Village médiéval. Bateau île San Giulio ~4€/pers.</desc></wpt>
+  <wpt lat="45.7960" lon="8.4150"><name>Île San Giulio</name><desc>Basilique romane. Laisser vélos à quai.</desc></wpt>
+  <wpt lat="45.9100" lon="8.4700"><name>Baveno — Airbnb</name><desc>Nuit 1 — Hôte : Chiara. Lac Majeur.</desc></wpt>
+</gpx>

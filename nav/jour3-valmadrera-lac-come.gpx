@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Béthanie - Road Trip Italie 2026"
+  xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>Jour 3 — Valmadrera → Lac de Côme → Lecco</name>
+    <desc>Lundi 7 avril. Voiture Valmadrera-Côme ~31 km, vélo piste Adda ~20 km, funiculaire Côme-Brunate.</desc>
+    <time>2026-04-07T09:00:00Z</time>
+  </metadata>
+  <rte>
+    <name>Valmadrera → Côme → Lecco → Valmadrera</name>
+    <rtept lat="45.8400" lon="9.3700"><name>Valmadrera — Départ</name></rtept>
+    <rtept lat="45.8141" lon="9.0852"><name>Côme — Funiculaire + vieux port</name></rtept>
+    <rtept lat="45.8566" lon="9.3954"><name>Lecco — Piste de l'Adda</name></rtept>
+    <rtept lat="45.8400" lon="9.3700"><name>Valmadrera — Retour nuit 3</name></rtept>
+  </rte>
+  <wpt lat="45.8180" lon="9.0700"><name>Funiculaire Côme → Brunate</name><desc>3.80€/pers. Vue panoramique sur le lac. 7 min de trajet.</desc></wpt>
+  <wpt lat="45.8141" lon="9.0852"><name>Côme — Vieux port</name><desc>Piste cyclable bord de lac vers Cernobbio ~10 km.</desc></wpt>
+  <wpt lat="45.8566" lon="9.3954"><name>Lecco</name><desc>Départ piste de l'Adda ~20 km, plat, familial.</desc></wpt>
+</gpx>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Béthanie - Road Trip Italie 2026"
+  xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>Jour 5 — Riva del Garda → Sentiero del Ponale → Riva</name>
+    <desc>Mercredi 9 avril matin. Vélo Sentiero del Ponale depuis Riva ~5 km A/R. Puis route Riva → Lugano → Morez.</desc>
+    <time>2026-04-09T08:00:00Z</time>
+  </metadata>
+  <rte>
+    <name>Riva → Limone (Ponale) → retour Riva → Lugano → Morez</name>
+    <rtept lat="45.8912" lon="10.8404"><name>Riva del Garda — Départ matin</name></rtept>
+    <rtept lat="45.8128" lon="10.7927"><name>Limone — Départ Sentiero del Ponale</name></rtept>
+    <rtept lat="45.8912" lon="10.8404"><name>Riva del Garda — Retour voiture</name></rtept>
+    <rtept lat="46.0037" lon="8.9511"><name>Lugano — Balade quais</name></rtept>
+    <rtept lat="46.5233" lon="6.0244"><name>Morez — Retour maison 🏠</name></rtept>
+  </rte>
+  <wpt lat="45.8128" lon="10.7927"><name>Sentiero del Ponale</name><desc>Piste suspendue 50m au-dessus du lac. 5 km A/R. 10 km/h max. Gratuit.</desc></wpt>
+  <wpt lat="46.0037" lon="8.9511"><name>Lugano</name><desc>Balade quais ~10 km. Déjeuner avant le retour.</desc></wpt>
+  <wpt lat="46.5233" lon="6.0244"><name>Morez</name><desc>Arrivée prévue ~19h00.</desc></wpt>
+</gpx>
