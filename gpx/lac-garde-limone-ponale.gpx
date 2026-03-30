@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Béthanie - Road Trip Italie 2026"
+  xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>Lac de Garde — Sentiero del Ponale (piste suspendue)</name>
+    <desc>Piste cyclable suspendue au-dessus du lac de Garde. ~2.5 km aller (5 km A/R). Spectaculaire ! Vitesse max 10 km/h.</desc>
+    <time>2026-04-08T09:00:00Z</time>
+  </metadata>
+  <trk>
+    <name>Sentiero del Ponale — Limone sul Garda</name>
+    <trkseg>
+      <!-- Limone sul Garda - départ -->
+      <trkpt lat="45.8128" lon="10.7927"><ele>68</ele><name>Limone sul Garda - Départ</name></trkpt>
+      <trkpt lat="45.8180" lon="10.7890"><ele>120</ele></trkpt>
+      <trkpt lat="45.8230" lon="10.7860"><ele>180</ele></trkpt>
+      <trkpt lat="45.8280" lon="10.7840"><ele>230</ele></trkpt>
+      <!-- Capo Reamol - fin piste suspendue -->
+      <trkpt lat="45.8350" lon="10.7820"><ele>68</ele><name>Capo Reamol - Fin piste suspendue</name></trkpt>
+    </trkseg>
+  </trk>
+  <wpt lat="45.8128" lon="10.7927">
+    <name>Limone sul Garda</name>
+    <desc>Départ Sentiero del Ponale. Village pittoresque, citrons fameux. Parking vélos disponible.</desc>
+  </wpt>
+  <wpt lat="45.8912" lon="10.8404">
+    <name>Riva del Garda</name>
+    <desc>Paradis du vélo ! Nombreuses pistes, lac turquoise, vent pour le kitesurf.</desc>
+  </wpt>
+  <wpt lat="45.8350" lon="10.7820">
+    <name>Capo Reamol</name>
+    <desc>Point d'arrivée de la piste suspendue. Vue imprenable sur le lac.</desc>
+  </wpt>
+</gpx>

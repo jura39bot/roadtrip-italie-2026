@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚴 Road Trip Lacs Italiens — Avril 2026</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #eee; display: flex; flex-direction: column; height: 100vh; }
+    header {
+      background: linear-gradient(135deg, #16213e, #1a6b3a);
+      padding: 12px 20px; display: flex; align-items: center; gap: 12px;
+      border-bottom: 2px solid #2ecc71;
+    }
+    header h1 { font-size: 1.2rem; color: #fff; }
+    header .sub { font-size: 0.8rem; color: #aaa; }
+    header .badge { background: #2ecc71; color: #111; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; margin-left: auto; font-weight: bold; }
+    .main { display: flex; flex: 1; overflow: hidden; }
+    #map { flex: 1; min-height: 400px; }
+    .sidebar { width: 370px; background: #16213e; overflow-y: auto; border-left: 2px solid #0f3460; }
+    .tabs { display: flex; background: #0f3460; position: sticky; top: 0; z-index: 100; }
+    .tab { flex: 1; padding: 10px 4px; text-align: center; cursor: pointer; font-size: 0.72rem; color: #aaa; border-bottom: 3px solid transparent; transition: all 0.2s; }
+    .tab.active { color: #2ecc71; border-bottom-color: #2ecc71; }
+    .tab-content { display: none; padding: 12px; }
+    .tab-content.active { display: block; }
+    .day-card { background: #0f3460; border-radius: 10px; margin-bottom: 10px; overflow: hidden; border-left: 4px solid #2ecc71; }
+    .day-header { display: flex; align-items: center; gap: 8px; padding: 10px 12px; cursor: pointer; background: #16213e; }
+    .day-num { background: #2ecc71; color: #111; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; flex-shrink: 0; }
+    .day-title h3 { font-size: 0.9rem; color: #fff; }
+    .day-title .dates { font-size: 0.72rem; color: #2ecc71; }
+    .day-body { padding: 10px 12px; font-size: 0.78rem; line-height: 1.6; display: none; }
+    .day-body.open { display: block; }
+    .chip { display: inline-flex; align-items: center; gap: 4px; background: #1a1a2e; border-radius: 20px; padding: 3px 10px; font-size: 0.7rem; color: #ccc; margin: 2px; }
+    .chip.green { border: 1px solid #2ecc71; color: #2ecc71; }
+    .chip.orange { border: 1px solid #f39c12; color: #f39c12; }
+    .chip.blue { border: 1px solid #3498db; color: #3498db; }
+    .chip.red { border: 1px solid #e74c3c; color: #e74c3c; }
+    #fullscreen-btn { position: absolute; top: 10px; right: 10px; z-index: 1000; background: #16213e; color: #2ecc71; border: 2px solid #2ecc71; border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+    #fullscreen-btn:hover { background: #2ecc71; color: #111; }
+    :fullscreen #map, :-webkit-full-screen #map { height: 100vh; width: 100vw; }
+    .velo-card { background: #1a1a2e; border-radius: 8px; padding: 10px; margin: 6px 0; border-left: 3px solid #2ecc71; }
+    .velo-card h4 { color: #2ecc71; font-size: 0.82rem; margin-bottom: 4px; }
+    .velo-card p { font-size: 0.72rem; color: #bbb; }
+    .resto-card { background: #1a1a2e; border-radius: 8px; padding: 10px; margin: 6px 0; border-left: 3px solid #f39c12; }
+    .resto-card h4 { color: #f39c12; font-size: 0.82rem; margin-bottom: 4px; }
+    .resto-card p { font-size: 0.72rem; color: #bbb; }
+    .section-title { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin: 10px 0 6px; }
+    #loading { position: absolute; top: 50%; left: 40%; transform: translate(-50%,-50%); z-index: 2000; background: #16213e; color: #fff; padding: 20px 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); text-align: center; border: 1px solid #2ecc71; }
+  </style>
+</head>
+<body>
+<header>
+  <div style="font-size:2em">🚴‍♂️</div>
+  <div>
+    <h1>Road Trip — Lacs Italiens à Vélo</h1>
+    <div class="sub">4 → 9 Avril 2026 • Morez → Orta → Majeur → Côme → Garde → Lugano</div>
+  </div>
+  <div class="badge">5 nuits • 6 jours</div>
+</header>
+<div class="main">
+  <div style="position:relative; flex:1" id="map-container">
+    <div id="map"></div>
+    <div id="loading">🗺️ Calcul des routes…</div>
+    <button id="fullscreen-btn" onclick="toggleFullscreen()">⛶ Plein écran</button>
+  </div>
+  <div class="sidebar">
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('programme')">📅 Programme</div>
+      <div class="tab" onclick="showTab('velo')">🚴 Vélo</div>
+      <div class="tab" onclick="showTab('restos')">🍽️ Restos</div>
+      <div class="tab" onclick="showTab('airbnb')">🏠 Airbnb</div>
+    </div>
+
+    <!-- PROGRAMME -->
+    <div class="tab-content active" id="tab-programme">
+
+      <!-- Résumé kilométrique -->
+      <div style="background:#0f3460;border-radius:10px;padding:12px;margin-bottom:12px;border-left:4px solid #e74c3c">
+        <div style="font-size:0.8rem;color:#e74c3c;font-weight:bold;margin-bottom:8px">🚗 Kilométrage total du voyage</div>
+        <table style="width:100%;font-size:0.72rem;border-collapse:collapse;color:#ccc">
+          <tr style="color:#888;font-size:0.68rem"><td>Trajet</td><td style="text-align:right">km</td><td style="text-align:right">durée</td></tr>
+          <tr><td>Morez → Domodossola (Simplon)</td><td style="text-align:right;color:#e74c3c">274 km</td><td style="text-align:right">4h00</td></tr>
+          <tr><td>Domodossola → Lac d'Orta</td><td style="text-align:right;color:#e74c3c">39 km</td><td style="text-align:right">0h35</td></tr>
+          <tr><td>Orta → Arona/Stresa</td><td style="text-align:right;color:#e74c3c">22 km</td><td style="text-align:right">0h25</td></tr>
+          <tr><td>Stresa → (ferry) → Côme</td><td style="text-align:right;color:#e74c3c">90 km</td><td style="text-align:right">1h15</td></tr>
+          <tr><td>Côme → Lecco</td><td style="text-align:right;color:#e74c3c">31 km</td><td style="text-align:right">0h35</td></tr>
+          <tr><td>Lecco → Limone sul Garda</td><td style="text-align:right;color:#e74c3c">153 km</td><td style="text-align:right">2h30</td></tr>
+          <tr><td>Riva del Garda → Lugano</td><td style="text-align:right;color:#e74c3c">240 km</td><td style="text-align:right">3h20</td></tr>
+          <tr><td>Lugano → Morez (retour)</td><td style="text-align:right;color:#e74c3c">402 km</td><td style="text-align:right">5h10</td></tr>
+          <tr style="border-top:1px solid #333;font-weight:bold;color:#fff"><td>TOTAL</td><td style="text-align:right;color:#2ecc71">1 251 km</td><td style="text-align:right;color:#2ecc71">~18h</td></tr>
+        </table>
+        <div style="margin-top:8px;font-size:0.7rem;color:#888">🚴 + ~100 km de vélo sur le séjour</div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-num">V</div>
+          <div class="day-title"><h3>Morez → Domodossola</h3><div class="dates">Vendredi 4 avril — soir</div></div>
+          <span>▾</span>
+        </div>
+        <div class="day-body">
+          🚗 <strong>274 km — ~4h</strong> via col du Simplon<br>
+          💰 Vignette suisse 40 CHF (~42€) — valable tout le séjour<br><br>
+          <div><span class="chip blue">⛰️ Col du Simplon</span><span class="chip green">🌙 Arrivée ~22h</span></div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-num">1</div>
+          <div class="day-title"><h3>Lac d'Orta</h3><div class="dates">Samedi 5 avril</div></div>
+          <span>▾</span>
+        </div>
+        <div class="day-body">
+          🚗 Domodossola → Omegna : <strong>39 km — 35 min</strong><br>
+          🚴 Omegna → Orta San Giulio (~25 km, rive ouest)<br>
+          ⛵ Bateau pour l'île San Giulio (~4€/pers)<br>
+          🚗 Orta → Arona/Stresa : <strong>22 km — 25 min</strong><br>
+          🛏️ Nuit : Arona ou Stresa<br><br>
+          <div><span class="chip red">🚗 61 km</span><span class="chip green">🚴 25 km facile</span><span class="chip orange">⛵ Île San Giulio</span></div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-num">2</div>
+          <div class="day-title"><h3>Lac Majeur</h3><div class="dates">Dimanche 6 avril</div></div>
+          <span>▾</span>
+        </div>
+        <div class="day-body">
+          🚴 Arona → Stresa (~30 km, bord du lac)<br>
+          ⛴️ Ferry Stresa → Laveno (vélos acceptés)<br>
+          🏝️ Option : Isola Bella<br>
+          🚗 Laveno → Côme : <strong>90 km — 1h15</strong><br>
+          🛏️ Nuit : Côme / Varese<br><br>
+          <div><span class="chip red">🚗 90 km</span><span class="chip green">🚴 30 km plat</span><span class="chip blue">⛴️ Ferry inclus</span></div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-num">3</div>
+          <div class="day-title"><h3>Lac de Côme</h3><div class="dates">Lundi 7 avril</div></div>
+          <span>▾</span>
+        </div>
+        <div class="day-body">
+          🚗 Côme → Lecco : <strong>31 km — 35 min</strong><br>
+          🚴 Piste de l'Adda (Lecco) ~20 km, plat<br>
+          🚡 Funiculaire Côme → Brunate (vue panoramique)<br>
+          🛏️ Nuit : Côme / Lecco<br><br>
+          <div><span class="chip red">🚗 31 km</span><span class="chip green">🚴 20 km plat</span><span class="chip orange">🚡 Funiculaire</span></div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-num">4</div>
+          <div class="day-title"><h3>Lac de Garde 🌟</h3><div class="dates">Mardi 8 avril</div></div>
+          <span>▾</span>
+        </div>
+        <div class="day-body">
+          🚗 Lecco → Limone sul Garda : <strong>153 km — 2h30</strong><br>
+          🌟 Sentiero del Ponale — piste SUSPENDUE (~5 km A/R)<br>
+          🚴 Détente à Riva del Garda<br>
+          🛏️ Nuit : Riva / Rovereto<br><br>
+          <div><span class="chip red">🚗 153 km</span><span class="chip red">🌟 Incontournable</span><span class="chip orange">10 km/h max</span></div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-num">5</div>
+          <div class="day-title"><h3>Lugano → Morez</h3><div class="dates">Mercredi 9 avril</div></div>
+          <span>▾</span>
+        </div>
+        <div class="day-body">
+          🚗 Riva → Lugano : <strong>240 km — 3h20</strong><br>
+          🚴 Quais de Lugano (~10 km, plat)<br>
+          🚗 Lugano → Morez : <strong>402 km — 5h10</strong><br>
+          🏠 Arrivée Morez ~19h<br><br>
+          <div><span class="chip red">🚗 642 km ce jour</span><span class="chip green">🇨🇭 Suisse</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VÉLO -->
+    <div class="tab-content" id="tab-velo">
+
+      <div class="section-title">🚴 Boucles journalières (~10-12 km)</div>
+
+      <div class="velo-card">
+        <h4>🔵 Boucle Orta — Pella & Rives occ.</h4>
+        <p><strong>~11 km • Facile • Famille ✅</strong></p>
+        <p>Départ Orta San Giulio → rive ouest jusqu'à Pella → retour par les hauteurs avec vue plongeante sur l'île. Chemin tranquille, peu de trafic.</p>
+        <div style="margin-top:6px"><span class="chip green">↕️ Dénivelé faible</span><span class="chip orange">📸 Vue île</span></div>
+      </div>
+
+      <div class="velo-card">
+        <h4>🟢 Boucle Stresa — Baveno & Bord lac</h4>
+        <p><strong>~12 km • Très facile • Famille ✅</strong></p>
+        <p>Stresa → Baveno le long du lac (piste cyclable) → retour par l'arrière-ville via les hôtels palaces. Plat total, idéal avec enfants.</p>
+        <div style="margin-top:6px"><span class="chip green">🏠 100% plat</span><span class="chip blue">🏨 Palaces Belle Époque</span></div>
+      </div>
+
+      <div class="velo-card">
+        <h4>🟡 Boucle Côme — Vieux port & Cernobbio</h4>
+        <p><strong>~10 km • Facile • Famille ✅</strong></p>
+        <p>Côme vieille ville → piste bord de lac vers Cernobbio (villa d'Este) → retour. Magnifique vue sur le lac, piste cyclable dédiée.</p>
+        <div style="margin-top:6px"><span class="chip orange">🏛️ Villa d'Este</span><span class="chip green">🚴 Piste dédiée</span></div>
+      </div>
+
+      <div class="velo-card">
+        <h4>🔴 Sentiero del Ponale — Limone ⭐</h4>
+        <p><strong>~5 km A/R • Spectaculaire • Famille ✅</strong></p>
+        <p>La piste cyclable suspendue au-dessus du lac de Garde ! Creusée dans la falaise, surplombe l'eau de 50m. Court mais inoubliable. Vitesse limitée à 10 km/h.</p>
+        <div style="margin-top:6px"><span class="chip red">⚠️ 10 km/h max</span><span class="chip orange">📸 Vue à couper le souffle</span></div>
+      </div>
+
+      <div class="velo-card">
+        <h4>🔵 Boucle Riva del Garda — Porto & Lac</h4>
+        <p><strong>~12 km • Très facile • Famille ✅</strong></p>
+        <p>Riva del Garda → piste nord vers Torbole → retour par les quais. Vent du lac (ora/pelèr), parfait pour les familles. Nombreux points de pique-nique.</p>
+        <div style="margin-top:6px"><span class="chip green">🌊 Bord de lac</span><span class="chip blue">🪁 Kitesurf à voir</span></div>
+      </div>
+
+      <div class="velo-card">
+        <h4>🟢 Boucle Lugano — Paradiso & Castagnola</h4>
+        <p><strong>~11 km • Facile • Famille ✅</strong></p>
+        <p>Centre Lugano → Paradiso → Castagnola → retour par les parcs fleuris. En avril les jardins sont en fleurs. Terrain plat le long des quais.</p>
+        <div style="margin-top:6px"><span class="chip green">🌸 Floraisons avril</span><span class="chip blue">🇨🇭 Suisse</span></div>
+      </div>
+
+      <div class="section-title">ℹ️ Infos pratiques vélo</div>
+      <div style="background:#0f3460;border-radius:8px;padding:10px;font-size:0.75rem;color:#bbb;line-height:1.6">
+        🚲 Vélos sur les <strong>ferries Navigazione Laghi</strong> : supplément ~3€/vélo<br>
+        ⛴️ Réserver à l'avance : <strong>navigazionelaghi.it</strong><br>
+        🌡️ Météo avril : 12-18°C, prévoir coupe-vent<br>
+        🔧 Atelier vélo Stresa : <strong>Bike Maggiore</strong> (Via Sempione 7)<br>
+        📱 App : <strong>Komoot</strong> pour GPX sur smartphone
+      </div>
+    </div>
+
+    <!-- RESTAURANTS -->
+    <div class="tab-content" id="tab-restos">
+
+      <div class="section-title">🛏️ Nuit 1 — Orta San Giulio</div>
+
+      <div class="resto-card">
+        <h4>🍝 Ristorante Venus</h4>
+        <p>Vue directe sur le lac et l'île San Giulio. Spécialités lacustres (perche, lavarello). Cadre romantique en bord d'eau.</p>
+        <div style="margin-top:5px"><span class="chip orange">€€</span><span class="chip green">⭐ TripAdvisor Top</span><span class="chip blue">🐟 Poisson du lac</span></div>
+      </div>
+
+      <div class="resto-card">
+        <h4>🍕 Pizzeria Al Boeuc</h4>
+        <p>Dans les ruelles d'Orta. Excellente pizzeria familiale, idéale avec enfants. Prix raisonnables, ambiance locale.</p>
+        <div style="margin-top:5px"><span class="chip green">€</span><span class="chip orange">👨‍👩‍👧 Famille</span></div>
+      </div>
+
+      <div class="section-title">🛏️ Nuit 2 — Arona / Stresa</div>
+
+      <div class="resto-card">
+        <h4>🍽️ La Taverna del Pittore — Arona</h4>
+        <p>Belle décoration, excellente vue sur le lac Majeur. Cuisine piémontaise raffinée. À réserver.</p>
+        <div style="margin-top:5px"><span class="chip orange">€€€</span><span class="chip green">⭐ Très recommandé</span></div>
+      </div>
+
+      <div class="resto-card">
+        <h4>☕ Cardini — Stresa</h4>
+        <p>Établi depuis les années 1920. Terrasse avec vue imprenable sur le lac. Cuisine traditionnelle italienne. Incontournable.</p>
+        <div style="margin-top:5px"><span class="chip orange">€€</span><span class="chip blue">🌅 Terrasse lac</span></div>
+      </div>
+
+      <div class="section-title">🛏️ Nuit 3 — Côme / Lecco</div>
+
+      <div class="resto-card">
+        <h4>🍝 Ristorante Sociale — Côme</h4>
+        <p>Institution de Côme depuis 1924. Cuisine lombarde authentique. Risotto, ossobuco. Prix raisonnables, cadre historique.</p>
+        <div style="margin-top:5px"><span class="chip green">€€</span><span class="chip orange">🏛️ Historique</span></div>
+      </div>
+
+      <div class="resto-card">
+        <h4>🍕 Pizzeria Barchetta — Lecco</h4>
+        <p>Bord du lac de Lecco, terrasse avec vue sur les Cornes. Pizzas napolitaines, service rapide. Parfait pour familles.</p>
+        <div style="margin-top:5px"><span class="chip green">€</span><span class="chip blue">🏔️ Vue montagnes</span></div>
+      </div>
+
+      <div class="section-title">🛏️ Nuit 4 — Riva del Garda</div>
+
+      <div class="resto-card">
+        <h4>🍽️ Bellariva — Riva del Garda</h4>
+        <p>Adapté aux familles, vue sur le lac. Cuisine du Trentin, spécialités de truite et de carpaccio de lavarello.</p>
+        <div style="margin-top:5px"><span class="chip orange">€€</span><span class="chip green">👨‍👩‍👧 Famille</span><span class="chip blue">🐟 Spécialités lac</span></div>
+      </div>
+
+      <div class="resto-card">
+        <h4>🍕 Ristorante Pizzeria Primo — Riva</h4>
+        <p>TripAdvisor top, très fréquenté par les cyclistes. Excellentes pizzas, grande terrasse. Réserver le soir.</p>
+        <div style="margin-top:5px"><span class="chip green">€€</span><span class="chip orange">⭐ 4.9/5</span></div>
+      </div>
+
+      <div class="section-title">🛏️ Nuit 5 — Lugano (Suisse)</div>
+
+      <div class="resto-card">
+        <h4>🇨🇭 Ristorante Lugano Dante</h4>
+        <p>En centre-ville, place centrale. Cuisine italo-suisse, risotto, polenta. Vue sur la piazza. Menu du jour abordable.</p>
+        <div style="margin-top:5px"><span class="chip green">€€</span><span class="chip blue">🏙️ Piazza centrale</span></div>
+      </div>
+
+      <div class="resto-card">
+        <h4>🐟 Ristorante Riviera — Lugano Paradiso</h4>
+        <p>Sur les quais de Paradiso, vue sur le Monte San Salvatore. Poissons du lac de Lugano. Cadre magnifique en soirée.</p>
+        <div style="margin-top:5px"><span class="chip orange">€€€</span><span class="chip green">🌅 Vue lac</span></div>
+      </div>
+
+    <!-- AIRBNB -->
+    <div class="tab-content" id="tab-airbnb">
+      <div class="section-title">🏠 Hébergements réservés</div>
+
+      <div style="background:#0f3460;border-radius:10px;padding:12px;margin-bottom:10px;border-left:4px solid #9b59b6">
+        <div style="font-size:0.82rem;color:#9b59b6;font-weight:bold;margin-bottom:6px">📅 Récapitulatif nuits</div>
+        <table style="width:100%;font-size:0.72rem;border-collapse:collapse;color:#ccc">
+          <tr style="color:#888;font-size:0.68rem"><td>Nuit</td><td>Lieu</td><td style="text-align:right">Statut</td></tr>
+          <tr style="color:#2ecc71;font-weight:bold"><td>Jeu 3 → Ven 4</td><td>🏠 Montescheno</td><td style="text-align:right">✅ Réservé</td></tr>
+          <tr style="color:#2ecc71;font-weight:bold"><td>Ven 4 → Sam 5</td><td>🏠 Baveno</td><td style="text-align:right">✅ Réservé</td></tr>
+          <tr style="color:#2ecc71;font-weight:bold"><td>Sam 5 → Lun 7</td><td>🏠 Valmadrera (2 nuits)</td><td style="text-align:right">✅ Réservé</td></tr>
+          <tr><td>Lun 7 → Mar 8</td><td>À définir</td><td style="text-align:right;color:#f39c12">À réserver</td></tr>
+          <tr style="color:#2ecc71;font-weight:bold"><td>Mar 8 → Mer 9</td><td>🏠 Riva del Garda</td><td style="text-align:right">✅ Réservé</td></tr>
+        </table>
+      </div>
+
+      <div class="section-title">✅ Réservations confirmées</div>
+
+      <div style="background:#1a1a2e;border-radius:8px;padding:12px;margin:6px 0;border-left:4px solid #2ecc71">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="font-size:1.8em">🏠</span>
+          <div style="flex:1">
+            <div style="font-size:0.9rem;color:#2ecc71;font-weight:bold">Queen Of The Lake — Studio</div>
+            <div style="font-size:0.72rem;color:#888">Riva del Garda · Hôte : 1Dest · ★ 4.39 (162 avis)</div>
+          </div>
+          <span style="background:#2ecc71;color:#111;padding:2px 8px;border-radius:10px;font-size:0.7rem;font-weight:bold;white-space:nowrap">✅ CONFIRMÉ</span>
+        </div>
+        <div style="font-size:0.78rem;color:#ccc;line-height:1.7;background:#0f3460;border-radius:6px;padding:8px">
+          📅 <strong>Mardi 8 → Mercredi 9 avril</strong> · 1 nuit<br>
+          📍 Riva del Garda, Trentin-Haut-Adige, Lac de Garde<br>
+          👥 Capacité : 4 voyageurs · 1 chambre · 3 lits · 1 SDB<br>
+          🔑 Arrivée autonome (boîte à clé)<br>
+          🐾 Animaux acceptés<br>
+          🚴 À 5 min du départ du Sentiero del Ponale<br>
+          🚗 <strong>Retour direct Riva → Morez le 9 avril</strong>
+        </div>
+        <div style="margin-top:8px">
+          <span class="chip green">📅 8-9 avril</span>
+          <span class="chip blue">🏊 Bord du Lac de Garde</span>
+          <span class="chip orange">🚴 Ponale à côté</span>
+          <span class="chip" style="border:1px solid #9b59b6;color:#9b59b6">⭐ 4.39/5</span>
+        </div>
+      </div>
+
+      <div style="background:#1a1a2e;border-radius:8px;padding:12px;margin:6px 0;border-left:4px solid #2ecc71">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="font-size:1.6em">🏠</span>
+          <div style="flex:1">
+            <div style="font-size:0.88rem;color:#2ecc71;font-weight:bold">Airbnb — Montescheno</div>
+            <div style="font-size:0.72rem;color:#888">Hôte : Sonia, Renato, Mélanie · Val d'Ossola</div>
+          </div>
+          <span style="background:#2ecc71;color:#111;padding:2px 8px;border-radius:10px;font-size:0.7rem;font-weight:bold">✅ CONFIRMÉ</span>
+        </div>
+        <div style="font-size:0.78rem;color:#ccc;line-height:1.7;background:#0f3460;border-radius:6px;padding:8px">
+          📅 <strong>Jeudi 3 → Vendredi 4 avril</strong> · 1 nuit<br>
+          📍 Montescheno, Vallée d'Ossola, Piémont<br>
+          🗻 Village de montagne avant la descente vers les lacs
+        </div>
+        <div style="margin-top:7px"><span class="chip green">📅 3-4 avril</span><span class="chip orange">🗻 Val d'Ossola</span></div>
+      </div>
+
+      <div style="background:#1a1a2e;border-radius:8px;padding:12px;margin:6px 0;border-left:4px solid #2ecc71">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="font-size:1.6em">🏠</span>
+          <div style="flex:1">
+            <div style="font-size:0.88rem;color:#2ecc71;font-weight:bold">Airbnb — Baveno</div>
+            <div style="font-size:0.72rem;color:#888">Hôte : Chiara · Lac Majeur</div>
+          </div>
+          <span style="background:#2ecc71;color:#111;padding:2px 8px;border-radius:10px;font-size:0.7rem;font-weight:bold">✅ CONFIRMÉ</span>
+        </div>
+        <div style="font-size:0.78rem;color:#ccc;line-height:1.7;background:#0f3460;border-radius:6px;padding:8px">
+          📅 <strong>Vendredi 4 → Samedi 5 avril</strong> · 1 nuit<br>
+          📍 Baveno, Lac Majeur — en face des Îles Borromées<br>
+          🏊 À 10 min à vélo de Stresa, vue sur le lac
+        </div>
+        <div style="margin-top:7px"><span class="chip green">📅 4-5 avril</span><span class="chip blue">🏊 Lac Majeur</span></div>
+      </div>
+
+      <div style="background:#1a1a2e;border-radius:8px;padding:12px;margin:6px 0;border-left:4px solid #2ecc71">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="font-size:1.6em">🏠</span>
+          <div style="flex:1">
+            <div style="font-size:0.88rem;color:#2ecc71;font-weight:bold">Airbnb — Valmadrera</div>
+            <div style="font-size:0.72rem;color:#888">Hôte : Germana · Lac de Côme / Lecco</div>
+          </div>
+          <span style="background:#2ecc71;color:#111;padding:2px 8px;border-radius:10px;font-size:0.7rem;font-weight:bold">✅ CONFIRMÉ</span>
+        </div>
+        <div style="font-size:0.78rem;color:#ccc;line-height:1.7;background:#0f3460;border-radius:6px;padding:8px">
+          📅 <strong>Samedi 5 → Lundi 7 avril</strong> · 2 nuits<br>
+          📍 Valmadrera, Lac de Côme (côté Lecco)<br>
+          🚴 Base parfaite pour la piste de l'Adda et Lecco<br>
+          🏔️ Vue sur les Cornes de Canzo
+        </div>
+        <div style="margin-top:7px"><span class="chip green">📅 5-7 avril</span><span class="chip blue">🏊 Lac de Côme</span><span class="chip orange">🚴 2 nuits</span></div>
+      </div>
+
+      <div style="background:#1a1a2e;border-radius:8px;padding:10px;margin:6px 0;border-left:3px solid #f39c12">
+        <div style="font-size:0.82rem;color:#f39c12;font-weight:bold">⚠️ Nuit 7→8 avril — À réserver</div>
+        <div style="font-size:0.72rem;color:#888;margin-top:4px">Lundi 7 → Mardi 8 avril. Entre Lecco/Côme et le Lac de Garde. Étape de transition.</div>
+        <div style="margin-top:5px"><span class="chip" style="border:1px solid #f39c12;color:#f39c12">📅 7-8 avril</span></div>
+      </div>
+    </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const names = ['programme','velo','restos','airbnb'];
+    t.classList.toggle('active', names[i] === name);
+  });
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function toggleDay(header) {
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// MAP
+const map = L.map('map').setView([45.85, 9.2], 8);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap', maxZoom: 18
+}).addTo(map);
+
+async function getRoute(waypoints, profile = 'driving') {
+  const coords = waypoints.map(p => `${p[1]},${p[0]}`).join(';');
+  const url = `https://router.project-osrm.org/route/v1/${profile}/${coords}?overview=full&geometries=geojson`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.routes && data.routes[0]) return data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+  } catch(e) {}
+  return waypoints;
+}
+
+async function draw() {
+  // Routes voiture
+  const routes = [
+    { pts: [[46.6749,6.1561],[46.1146,8.2923]], pop: '🚗 Morez → Domodossola (via Simplon)' },
+    { pts: [[46.1146,8.2923],[45.8789,8.4089]], pop: '🚗 Domodossola → Omegna / Lac Orta' },
+    { pts: [[45.7989,8.4206],[45.7545,8.5595]], pop: '🚗 Orta → Arona/Stresa' },
+    { pts: [[45.9300,8.6200],[45.8141,9.0852]], pop: '🚗 Laveno → Côme (après ferry)' },
+    { pts: [[45.8141,9.0852],[45.8566,9.3954]], pop: '🚗 Côme → Lecco' },
+    { pts: [[45.8566,9.3954],[45.8128,10.7927]], pop: '🚗 Lecco → Limone sul Garda' },
+    { pts: [[45.8912,10.8404],[46.0037,8.9511]], pop: '🚗 Riva → Lugano' },
+    { pts: [[46.0037,8.9511],[46.6749,6.1561]], pop: '🚗 Lugano → Morez (retour)' },
+  ];
+  for (const r of routes) {
+    const route = await getRoute(r.pts, 'driving');
+    L.polyline(route, { color: '#e74c3c', weight: 3, opacity: 0.7 }).addTo(map).bindPopup(r.pop);
+  }
+
+  // Boucles vélo
+  const velos = [
+    { pts: [[45.8789,8.4089],[45.8500,8.4020],[45.8200,8.3950],[45.7989,8.4206]], pop: '🚴 Lac d\'Orta — boucle ~11 km', color: '#2ecc71' },
+    { pts: [[45.7545,8.5595],[45.8100,8.5250],[45.8850,8.5280]], pop: '🚴 Lac Majeur — Arona → Stresa ~30 km', color: '#2ecc71' },
+    { pts: [[45.8566,9.3954],[45.8200,9.4100],[45.7600,9.4350],[45.7000,9.4600]], pop: '🚴 Piste Adda (Lecco) ~20 km', color: '#2ecc71' },
+    { pts: [[45.8128,10.7927],[45.8230,10.7860],[45.8350,10.7820]], pop: '🌟 Sentiero del Ponale SUSPENDU ~5 km A/R', color: '#f39c12' },
+    { pts: [[45.8912,10.8404],[45.9050,10.8550],[45.8750,10.8300],[45.8912,10.8404]], pop: '🚴 Boucle Riva del Garda ~12 km', color: '#2ecc71' },
+    { pts: [[46.0037,8.9511],[45.9820,8.9280],[45.9600,8.9150]], pop: '🚴 Quais Lugano ~11 km', color: '#2ecc71' },
+  ];
+  for (const v of velos) {
+    const route = await getRoute(v.pts, 'cycling');
+    L.polyline(route, { color: v.color, weight: 5, opacity: 0.9 }).addTo(map).bindPopup(v.pop);
+  }
+
+  // Ferry
+  L.polyline([[45.8850,8.5280],[45.9300,8.6200]], { color: '#3498db', weight: 3, dashArray: '8,6' })
+    .addTo(map).bindPopup('⛴️ Ferry Stresa → Laveno (vélos acceptés)');
+
+  // Marqueurs
+  const pts = [
+    { p:[46.6749,6.1561], i:'🏠', t:'Morez', d:'Départ ven. soir / Retour mer. soir' },
+    { p:[46.0650,8.2020], i:'🏠', t:'Nuit 0 — Montescheno ✅ Airbnb', d:'Jeudi 3 → Ven 4 avril · Hôte: Sonia, Renato, Mélanie · Val d\'Ossola' },
+    { p:[45.9100,8.4700], i:'🏠', t:'Nuit 1 — Baveno ✅ Airbnb', d:'Vendredi 4 → Sam 5 avril · Hôte: Chiara · Lac Majeur' },
+    { p:[45.7989,8.4206], i:'📍', t:'Orta San Giulio', d:'Village médiéval + île San Giulio' },
+    { p:[45.8989,8.5020], i:'🏝️', t:'Isola Bella', d:'Île Borromée — ferry depuis Stresa' },
+    { p:[45.8850,8.5280], i:'⛴️', t:'Stresa — Embarcadère ferry', d:'Ferry vers Laveno avec vélos' },
+    { p:[45.8141,9.0852], i:'📍', t:'Côme', d:'Visite + funiculaire Brunate' },
+    { p:[45.8180,9.0700], i:'🚡', t:'Funiculaire Côme → Brunate', d:'3.80€/pers, vue panoramique' },
+    { p:[45.8400,9.3700], i:'🏠', t:'Nuits 2-3 — Valmadrera ✅ Airbnb', d:'Sam 5 → Lun 7 avril (2 nuits) · Hôte: Germana · Lac de Côme/Lecco' },
+    { p:[45.8566,9.3954], i:'📍', t:'Lecco', d:'Piste de l\'Adda + Vue Cornes de Canzo' },
+    { p:[45.8128,10.7927], i:'🌟', t:'Limone sul Garda', d:'Départ piste suspendue Ponale !' },
+    { p:[45.8912,10.8404], i:'🏠', t:'Nuit 4 — Riva del Garda ✅ Airbnb', d:'Mar 8 → Mer 9 avril · Queen Of The Lake Studio · ★4.39 · Hôte: 1Dest' },
+    { p:[46.0037,8.9511], i:'📍', t:'Lugano', d:'Balade quais + retour Morez' },
+    // Restaurants
+    { p:[45.7989,8.4100], i:'🍽️', t:'Ristorante Venus', d:'Orta San Giulio — vue île, poissons du lac' },
+    { p:[45.7545,8.5500], i:'🍽️', t:'La Taverna del Pittore', d:'Arona — vue lac, cuisine piémontaise' },
+    { p:[45.8850,8.5350], i:'🍽️', t:'Cardini', d:'Stresa — terrasse lac depuis 1920' },
+    { p:[45.8200,9.0800], i:'🍽️', t:'Ristorante Sociale', d:'Côme — cuisine lombarde depuis 1924' },
+    { p:[45.8912,10.8300], i:'🍽️', t:'Bellariva', d:'Riva del Garda — famille, spécialités lac' },
+    { p:[46.0000,8.9400], i:'🍽️', t:'Ristorante Riviera', d:'Lugano Paradiso — vue lac, poissons' },
+  ];
+
+  pts.forEach(m => {
+    L.marker(m.p, {
+      icon: L.divIcon({ html: `<div style="font-size:20px;filter:drop-shadow(1px 1px 2px rgba(0,0,0,0.6))">${m.i}</div>`, className:'', iconSize:[26,26], iconAnchor:[13,13] })
+    }).addTo(map).bindPopup(`<b>${m.t}</b><br><span style="font-size:0.85em">${m.d}</span>`);
+  });
+
+  document.getElementById('loading').style.display = 'none';
+}
+
+draw();
+
+function toggleFullscreen() {
+  const container = document.getElementById('map-container');
+  if (!document.fullscreenElement) {
+    container.requestFullscreen().then(() => {
+      document.getElementById('fullscreen-btn').textContent = '✕ Quitter';
+      setTimeout(() => map.invalidateSize(), 300);
+    });
+  } else {
+    document.exitFullscreen().then(() => {
+      document.getElementById('fullscreen-btn').textContent = '⛶ Plein écran';
+      setTimeout(() => map.invalidateSize(), 300);
+    });
+  }
+}
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement) {
+    document.getElementById('fullscreen-btn').textContent = '⛶ Plein écran';
+    setTimeout(() => map.invalidateSize(), 300);
+  }
+});
+</script>
+</body>
+</html>

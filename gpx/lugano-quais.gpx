@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Béthanie - Road Trip Italie 2026"
+  xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>Lugano — Quais du lac</name>
+    <desc>Balade vélo sur les quais de Lugano. ~10 km, plat, magnifique.</desc>
+    <time>2026-04-09T09:00:00Z</time>
+  </metadata>
+  <trk>
+    <name>Lugano — Quais</name>
+    <trkseg>
+      <trkpt lat="46.0037" lon="8.9511"><ele>273</ele><name>Lugano Centro</name></trkpt>
+      <trkpt lat="45.9980" lon="8.9450"><ele>273</ele></trkpt>
+      <trkpt lat="45.9900" lon="8.9350"><ele>273</ele></trkpt>
+      <trkpt lat="45.9820" lon="8.9280"><ele>273</ele><name>Paradiso</name></trkpt>
+      <trkpt lat="45.9700" lon="8.9200"><ele>273</ele></trkpt>
+      <trkpt lat="45.9600" lon="8.9150"><ele>273</ele><name>Melide</name></trkpt>
+    </trkseg>
+  </trk>
+  <wpt lat="46.0037" lon="8.9511">
+    <name>Lugano Centro</name>
+    <desc>Centre de Lugano. Quais magnifiques, parcs fleuris en avril.</desc>
+  </wpt>
+  <wpt lat="45.9820" lon="8.9280">
+    <name>Paradiso</name>
+    <desc>Quartier de Paradiso — vue sur le Monte San Salvatore.</desc>
+  </wpt>
+</gpx>
