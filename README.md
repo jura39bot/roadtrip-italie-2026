@@ -23,7 +23,7 @@
 - `gpx/lugano-quais.gpx` — Quais de Lugano (~10 km, plat)
 
 ## 🗺️ Carte interactive
-Ouvrir `carte-voyage.html` dans un navigateur
+👉 **[Voir la carte en ligne](https://jura39bot.github.io/roadtrip-italie-2026/)**
 
 ## 📌 Infos pratiques
 - Ferries vélos : navigazionelaghi.it (réserver à l'avance)
